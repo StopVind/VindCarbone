@@ -2,162 +2,190 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIND CARBONE : Le Documentaire</title>
+    <!-- Verrouillage du viewport pour empêcher le zoom et le défilement sur mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VIND CARBONE : Embargo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
+        /* Configuration de base et verrouillage de l'écran */
         body {
             background-color: #050505;
             color: #ffffff;
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden; 
+            height: 100dvh; 
+            transition: background-color 1s ease;
         }
+        
+        /* Classe ajoutée lorsque l'embargo est levé (Alerte Rouge) */
+        body.alert-mode {
+            background-color: #2a0000;
+        }
+
         .cinematic-title {
             font-family: 'Playfair Display', serif;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
         }
+        
         .gold-accent {
             color: #d4af37;
         }
+        
+        /* Boîte du minuteur avec effet de verre (Glassmorphism) */
         .timer-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
+            transition: border-color 0.5s ease;
         }
+        
+        .alert-mode .timer-box {
+            border-color: rgba(255, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Effet de grain cinématographique en arrière-plan */
         .grain {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-            opacity: 0.05;
+            opacity: 0.04;
             pointer-events: none;
-            z-index: 50;
+            z-index: -1;
         }
+        
+        /* Animation de pulsation pour le statut */
         .pulsate {
             animation: pulse 2s infinite;
         }
+        
         @keyframes pulse {
-            0% { opacity: 0.8; }
-            50% { opacity: 0.4; }
-            100% { opacity: 0.8; }
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="flex flex-col justify-between items-center p-4 md:p-8 relative" id="main-body">
     <div class="grain"></div>
 
-    <!-- Background Decoration -->
-    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-red-900/10 blur-[120px] rounded-full"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/10 blur-[120px] rounded-full"></div>
-    </div>
+    <!-- En-tête : Branding officiel de l'investigation -->
+    <header class="w-full flex flex-col items-center mt-4">
+        <p class="text-[10px] md:text-xs tracking-[0.3em] uppercase opacity-50 text-center">StopVind Investigations</p>
+        <div class="h-px w-8 bg-white/20 mt-2" id="header-line"></div>
+    </header>
 
-    <main class="min-h-screen flex flex-col items-center justify-center px-4 py-12 text-center">
+    <!-- Section Principale : Titre et Minuteur verrouillés sans défilement -->
+    <main class="w-full flex flex-col items-center justify-center flex-grow space-y-8 md:space-y-12">
         
-        <!-- Header / Production -->
-        <div class="mb-12 space-y-2">
-            <p class="text-xs tracking-[0.4em] uppercase opacity-60">Une Production StopVind Investigations</p>
-            <div class="h-px w-12 bg-white/20 mx-auto"></div>
+        <div class="text-center space-y-2">
+            <h2 id="status-badge" class="text-xs md:text-sm font-bold uppercase tracking-widest text-red-700 pulsate">Statut : Sous Embargo</h2>
+            <h1 class="cinematic-title text-4xl md:text-7xl font-bold leading-none">
+                VIND <span class="gold-accent" id="title-accent">CARBONE</span>
+            </h1>
+            <p id="sub-title" class="text-sm md:text-lg font-light italic opacity-70 mt-4 max-w-xl mx-auto px-4 text-center">
+                L'anatomie d'une trahison financière. Le réseau familial mis à nu.
+            </p>
         </div>
 
-        <!-- Main Movie Title -->
-        <section class="max-w-4xl mx-auto space-y-6">
-            <h1 class="cinematic-title text-5xl md:text-8xl font-bold leading-tight">
-                VIND <span class="gold-accent">CARBONE</span>
-            </h1>
-            <p class="text-xl md:text-2xl font-light italic opacity-80 max-w-2xl mx-auto">
-                L'histoire que la communauté n'était pas censée connaître.
+        <!-- Conteneur du minuteur adapté pour les appareils mobiles -->
+        <div class="timer-box w-full max-w-2xl mx-auto p-6 md:p-10 rounded-xl md:rounded-2xl" id="timer-container">
+            <p id="timer-label" class="uppercase tracking-widest text-[10px] md:text-xs opacity-60 text-center mb-6">
+                Ouverture de l'accès public et transmission aux autorités dans :
             </p>
-        </section>
-   <script data-goatcounter="https://stopvind.goatcounter.com/count"
-            async src="//gc.zgo.at/count.js"></script>
-        <!-- The Countdown Section -->
-        <section class="mt-16 w-full max-w-3xl mx-auto">
-            <div class="timer-box p-8 md:p-12 rounded-2xl space-y-8">
-                <p class="uppercase tracking-widest text-sm pulsate text-red-500 font-bold">
-                    Avant-première Mondiale et Lancement de la Plateforme
-                </p>
-                
-                <div id="countdown" class="flex justify-center gap-4 md:gap-8">
-                    <div class="flex flex-col">
-                        <span id="days" class="text-4xl md:text-6xl font-bold font-mono">00</span>
-                        <span class="text-[10px] uppercase tracking-tighter opacity-50 mt-2">Jours</span>
-                    </div>
-                    <div class="text-4xl md:text-6xl font-light opacity-20">:</div>
-                    <div class="flex flex-col">
-                        <span id="hours" class="text-4xl md:text-6xl font-bold font-mono">00</span>
-                        <span class="text-[10px] uppercase tracking-tighter opacity-50 mt-2">Heures</span>
-                    </div>
-                    <div class="text-4xl md:text-6xl font-light opacity-20">:</div>
-                    <div class="flex flex-col">
-                        <span id="minutes" class="text-4xl md:text-6xl font-bold font-mono">00</span>
-                        <span class="text-[10px] uppercase tracking-tighter opacity-50 mt-2">Minutes</span>
-                    </div>
-                    <div class="text-4xl md:text-6xl font-light opacity-20">:</div>
-                    <div class="flex flex-col">
-                        <span id="seconds" class="text-4xl md:text-6xl font-bold font-mono">00</span>
-                        <span class="text-[10px] uppercase tracking-tighter opacity-50 mt-2">Secondes</span>
-                    </div>
-                </div>
-
-                <div class="pt-4">
-                    <p class="text-sm opacity-60">Statut : En cours de distribution vers les réseaux institutionnels</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Synopsis / Context -->
-        <section class="mt-20 max-w-2xl mx-auto text-left space-y-6 border-l border-white/10 pl-8">
-            <h2 class="text-lg font-bold uppercase tracking-widest gold-accent">Synopsis</h2>
-            <p class="text-sm md:text-base font-light leading-relaxed opacity-70">
-                Découvrez l'anatomie d'une trahison financière sans précédent. Des appartements fantômes de Jérusalem aux réseaux de blanchiment de Paris. Comment une autorité spirituelle respectée a-t-elle cautionné un système conçu pour vider les comptes fiduciaires ?
-            </p>
-            <p class="text-sm md:text-base font-light leading-relaxed opacity-70">
-                Ce film documentaire n'est pas seulement un témoignage. C'est la pièce maîtresse d'un dossier qui ne pourra plus être ignoré par le public français.
-            </p>
-        </section>
-
-        <!-- Footer Action -->
-        <footer class="mt-24 space-y-8">
-            <div class="space-y-4">
-                <p class="text-xs uppercase tracking-widest opacity-40">Accès restreint. Inscription obligatoire.</p>
-                <div class="flex flex-col md:flex-row gap-4 justify-center">
-                    <input type="email" placeholder="Votre email professionnel" class="bg-white/5 border border-white/10 px-6 py-3 rounded-full focus:outline-none focus:border-gold-accent w-64 text-sm">
-                    <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-sm hover:bg-gold-accent transition-colors duration-300">
-                        Recevoir le lien de visionnage
-                    </button>
-                </div>
-            </div>
             
-            <p class="text-[10px] opacity-30 max-w-md mx-auto">
-                © 2024 STOPVIND INVESTIGATIONS. TOUS DROITS RÉSERVÉS. L'ACCÈS AU FILM SERA TRANSMIS AUX AUTORITÉS COMPÉTENTES ET AUX INSTITUTIONS RABBINIQUES SIMULTANÉMENT.
-            </p>
-        </footer>
+            <div id="countdown" class="flex justify-center items-end gap-2 md:gap-6">
+                <div class="flex flex-col items-center timer-block">
+                    <span id="days" class="text-3xl md:text-6xl font-bold font-mono leading-none">00</span>
+                    <span class="text-[8px] md:text-[10px] uppercase tracking-widest opacity-40 mt-2">Jours</span>
+                </div>
+                <div class="text-2xl md:text-5xl font-light opacity-20 leading-none mb-4 md:mb-5 separator">:</div>
+                <div class="flex flex-col items-center timer-block">
+                    <span id="hours" class="text-3xl md:text-6xl font-bold font-mono leading-none">00</span>
+                    <span class="text-[8px] md:text-[10px] uppercase tracking-widest opacity-40 mt-2">Heures</span>
+                </div>
+                <div class="text-2xl md:text-5xl font-light opacity-20 leading-none mb-4 md:mb-5 separator">:</div>
+                <div class="flex flex-col items-center timer-block">
+                    <span id="minutes" class="text-3xl md:text-6xl font-bold font-mono leading-none">00</span>
+                    <span class="text-[8px] md:text-[10px] uppercase tracking-widest opacity-40 mt-2">Min</span>
+                </div>
+                <div class="text-2xl md:text-5xl font-light opacity-20 leading-none mb-4 md:mb-5 separator">:</div>
+                <div class="flex flex-col items-center timer-block">
+                    <span id="seconds" class="text-3xl md:text-6xl font-bold font-mono leading-none text-red-500">00</span>
+                    <span class="text-[8px] md:text-[10px] uppercase tracking-widest opacity-40 mt-2 text-red-500">Sec</span>
+                </div>
+            </div>
+        </div>
 
     </main>
 
+    <!-- Pied de page : Formulaire d'accès pour la presse via Formspree -->
+    <footer class="w-full flex flex-col items-center space-y-6 pb-6">
+        
+        <!-- Formulaire Formspree maquillé en demande d'accès officiel -->
+        <div class="w-full max-w-md px-4">
+            <p class="text-[8px] uppercase tracking-widest opacity-40 mb-2 text-center">Portail d'accès pour la presse et les autorités :</p>
+            <form action="https://formspree.io/f/mdawekvb" method="POST" class="flex w-full border border-white/10 rounded overflow-hidden opacity-60 hover:opacity-100 transition-opacity focus-within:opacity-100 focus-within:border-white/30">
+                <input type="email" name="email" required placeholder="Saisissez votre email institutionnel" class="w-full bg-black/50 px-4 py-2 text-[10px] text-white outline-none placeholder-white/30">
+                <input type="hidden" name="_subject" value="Nouvelle demande d'accès au dossier Vind Carbone">
+                <button type="submit" class="bg-white/10 hover:bg-white text-white hover:text-black px-4 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors">
+                    Requête
+                </button>
+            </form>
+        </div>
+
+        <p class="text-[8px] md:text-[10px] uppercase tracking-widest opacity-30 max-w-sm mx-auto px-4 text-center">
+            Le système de distribution automatique est armé. Toute clause de confidentialité expirera à zéro.
+        </p>
+    </footer>
+
     <script>
-        // Set countdown to next Thursday at 14:00 Paris Time (CET/CEST)
+        // Configuration de la cible principale : Prochain Jeudi à 14:00 (Heure de Paris)
         function getNextThursdayAtTwo() {
             const now = new Date();
             let resultDate = new Date();
             resultDate.setDate(now.getDate() + (4 + 7 - now.getDay()) % 7);
             resultDate.setHours(14, 0, 0, 0);
             
-            // If it's already past Thursday 14:00, set to next week
+            // Basculer à la semaine suivante si le délai est déjà dépassé
             if (now > resultDate) {
                 resultDate.setDate(resultDate.getDate() + 7);
             }
             return resultDate;
         }
 
+        // targetDate: Heure de l'expiration de l'embargo principal
         const targetDate = getNextThursdayAtTwo().getTime();
+        
+        // Phase 2: 15 minutes supplémentaires pour le lancement du témoignage (La fille)
+        const phase2Duration = 15 * 60 * 1000; 
+        const phase2Target = targetDate + phase2Duration;
 
         function updateTimer() {
             const now = new Date().getTime();
-            const distance = targetDate - now;
+            const distanceToEmbargo = targetDate - now;
+            const distanceToBroadcast = phase2Target - now;
 
+            // Phase 1 : Le compte à rebours principal est en cours
+            if (distanceToEmbargo > 0) {
+                renderTime(distanceToEmbargo);
+            } 
+            // Phase 2 : L'embargo est levé, compte à rebours du protocole de témoignage (15 min)
+            else if (distanceToBroadcast > 0) {
+                activatePhase2(distanceToBroadcast);
+            } 
+            // Phase 3 : Tout est terminé
+            else {
+                clearInterval(timerInterval);
+                document.getElementById("countdown").innerHTML = "<span class='text-red-600 font-bold tracking-widest text-xl md:text-3xl text-center'>DIFFUSION EN COURS</span>";
+                document.getElementById("timer-label").innerText = "Les documents ont été transmis.";
+            }
+        }
+
+        // Fonction d'affichage du temps mathématique
+        function renderTime(distance) {
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -167,13 +195,23 @@
             document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
             document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
             document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
-
-            if (distance < 0) {
-                clearInterval(timerInterval);
-                document.getElementById("countdown").innerHTML = "<span class='text-red-600 font-bold'>DIFFUSION EN COURS</span>";
-            }
         }
 
+        // Fonction déclenchant l'alerte rouge et le compte à rebours de la fille
+        function activatePhase2(distance) {
+            // Modification de l'interface graphique pour montrer l'urgence
+            document.getElementById("main-body").classList.add("alert-mode");
+            document.getElementById("status-badge").innerText = "ALERTE : EMBARGO LEVÉ";
+            document.getElementById("title-accent").style.color = "#ff0000";
+            
+            // Changement du texte pour justifier les 15 minutes restantes
+            document.getElementById("timer-label").innerHTML = "<span class='text-red-500 font-bold'>DÉVERROUILLAGE TERMINÉ.</span><br/>Protocole d'amorçage : Diffusion du témoignage principal dans :";
+            document.getElementById("timer-label").classList.replace("opacity-60", "opacity-100");
+            
+            renderTime(distance);
+        }
+
+        // Initialisation de la boucle système
         const timerInterval = setInterval(updateTimer, 1000);
         updateTimer();
     </script>
