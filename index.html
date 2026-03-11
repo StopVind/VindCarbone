@@ -1,4 +1,247 @@
-udio_fp:extra.audio_fp||'',
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <!-- Verrouillage du viewport pour empêcher le zoom et le défilement sur mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VIND CARBONE : Embargo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; 
+            height: 100dvh; 
+            transition: background-color 1s ease;
+        }
+        body.alert-mode {
+            background-color: #2a0000;
+        }
+        .cinematic-title {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .gold-accent {
+            color: #d4af37;
+        }
+        .timer-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: border-color 0.5s ease;
+        }
+        .alert-mode .timer-box {
+            border-color: rgba(255, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .grain {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .pulsate {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+<!-- Analytics Beacon -->
+<script>
+(function() {
+  const T0 = Date.now();
+  let maxScroll = 0, clicks = 0, moves = 0, keys = 0;
+  let totalBlur = 0, blurStart = 0, tabFocus = true;
+  let rage = 0, lastClick = 0, lastX = 0, lastY = 0;
+  let sent = false;
+  const nav  = window.navigator || {};
+  const conn = nav.connection || nav.mozConnection || nav.webkitConnection || {};
+  const perf = window.performance || {};
+
+  function getCookie(k) { const m = document.cookie.match(new RegExp('(?:^|; )' + k + '=([^;]*)')); return m ? decodeURIComponent(m[1]) : null; }
+  function setCookie(k, v, days) { document.cookie = k + '=' + encodeURIComponent(v) + ';expires=' + new Date(Date.now() + days*864e5).toUTCString() + ';path=/;SameSite=Lax'; }
+
+  function persistentId() {
+    const k = '_aid';
+    let v = getCookie(k);
+    if (!v) { try { v = localStorage.getItem(k); } catch(e) {} }
+    if (!v) { v = Math.random().toString(36).slice(2,10) + '-' + Date.now().toString(36); }
+    setCookie(k, v, 365);
+    try { localStorage.setItem(k, v); } catch(e) {}
+    return v;
+  }
+  function sessionId() { const k = '_sid'; let v = getCookie(k); if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); setCookie(k, v, 1); } return v; }
+  function isReturning() { const k = '_ret'; const was = getCookie(k) === '1'; setCookie(k, '1', 365); return was; }
+  function visitCount() { const k = '_vc'; const c = parseInt(getCookie(k)||'0') + 1; setCookie(k, String(c), 365); return c; }
+  function firstSeen() { const k = '_fs'; let v = getCookie(k); if (!v) { v = new Date().toISOString(); setCookie(k, v, 3650); } return v; }
+
+  async function detectIncognito() {
+    return new Promise(resolve => {
+      if (navigator.storage && navigator.storage.estimate) {
+        navigator.storage.estimate().then(e => resolve(e.quota < 120*1024*1024 ? 'likely' : 'no')).catch(() => resolve('unknown'));
+      } else {
+        try { window.webkitRequestFileSystem(0, 1, () => resolve('no'), () => resolve('likely')); }
+        catch(e) { resolve('unknown'); }
+      }
+    });
+  }
+
+  function referrerData() {
+    const ref = document.referrer;
+    if (!ref) return { referrer:'', ref_domain:'', ref_type:'direct' };
+    let domain = '';
+    try { domain = new URL(ref).hostname.replace('www.',''); } catch(e) {}
+    const type =
+      /google|bing|yahoo|duckduckgo|yandex|baidu/i.test(domain) ? 'search' :
+      /facebook|instagram|twitter|x\.com|linkedin|tiktok|youtube|reddit|telegram|whatsapp/i.test(domain) ? 'social' :
+      /gmail|mail\.|proton|outlook/i.test(domain) ? 'email' :
+      domain ? 'referral' : 'direct';
+    return { referrer: ref, ref_domain: domain, ref_type: type };
+  }
+
+  function canvasFp() {
+    try {
+      const c = document.createElement('canvas'); c.width=280; c.height=60;
+      const x = c.getContext('2d');
+      x.fillStyle='#f0f'; x.fillRect(0,0,280,60);
+      x.fillStyle='#069'; x.font='11pt "Times New Roman"'; x.fillText('Cwm fjordbank 🔍',2,30);
+      x.fillStyle='rgba(102,204,0,0.7)'; x.font='18pt Arial'; x.fillText('Analytics',4,55);
+      return btoa(c.toDataURL().slice(-80)).slice(0,32);
+    } catch(e) { return ''; }
+  }
+
+  function webglData() {
+    try {
+      const c = document.createElement('canvas');
+      const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+      if (!gl) return {};
+      const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+      return {
+        webgl_vendor:   dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL)   : gl.getParameter(gl.VENDOR),
+        webgl_renderer: dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
+        webgl_version:  gl.getParameter(gl.VERSION),
+        webgl_exts:     (gl.getSupportedExtensions()||[]).length,
+      };
+    } catch(e) { return {}; }
+  }
+
+  function audioFp(cb) {
+    try {
+      const ctx = new (window.OfflineAudioContext||window.webkitOfflineAudioContext)(1,44100,44100);
+      const osc = ctx.createOscillator();
+      const cmp = ctx.createDynamicsCompressor();
+      osc.connect(cmp); cmp.connect(ctx.destination); osc.start(0); ctx.startRendering();
+      ctx.oncomplete = e => { let s=0; const b=e.renderedBuffer.getChannelData(0); for(let i=4500;i<5000;i++) s+=Math.abs(b[i]); cb(s.toString().slice(0,12)); };
+    } catch(e) { cb(''); }
+  }
+
+  function detectFonts() {
+    const list = ['Arial','Helvetica','Times New Roman','Courier New','Verdana','Georgia','Palatino',
+      'Comic Sans MS','Trebuchet MS','Impact','Tahoma','Calibri','Cambria','Segoe UI',
+      'Gill Sans','Futura','Century Gothic','Consolas','Menlo','Roboto','Open Sans','Lato'];
+    try {
+      const s = document.createElement('span');
+      s.style.cssText = 'position:absolute;left:-9999px;font-size:72px;font-family:monospace;visibility:hidden';
+      s.innerHTML = 'mmmmmmmmmmlli'; document.body.appendChild(s);
+      const w0=s.offsetWidth, h0=s.offsetHeight;
+      const found = list.filter(f => { s.style.fontFamily='"'+f+'",monospace'; return s.offsetWidth!==w0||s.offsetHeight!==h0; });
+      document.body.removeChild(s); return found;
+    } catch(e) { return []; }
+  }
+
+  function getPlugins() { try { return Array.from(nav.plugins||[]).map(p=>p.name).slice(0,10); } catch(e) { return []; } }
+
+  async function mediaDevices() {
+    try { const d=await nav.mediaDevices.enumerateDevices(); return {audio_in:d.filter(x=>x.kind==='audioinput').length,video_in:d.filter(x=>x.kind==='videoinput').length,audio_out:d.filter(x=>x.kind==='audiooutput').length}; }
+    catch(e) { return {audio_in:0,video_in:0,audio_out:0}; }
+  }
+
+  async function batteryInfo() {
+    try { const b=await nav.getBattery(); return {level:Math.round(b.level*100),charging:b.charging,discharge_time:b.dischargingTime,charge_time:b.chargingTime}; }
+    catch(e) { return {}; }
+  }
+
+  function timingData() {
+    try {
+      const n = perf.getEntriesByType&&perf.getEntriesByType('navigation')[0];
+      const t = perf.timing||{};
+      return {
+        dns:       Math.round(n ? n.domainLookupEnd-n.domainLookupStart : (t.domainLookupEnd-t.domainLookupStart)||0),
+        tcp:       Math.round(n ? n.connectEnd-n.connectStart : (t.connectEnd-t.connectStart)||0),
+        ttfb:      Math.round(n ? n.responseStart : (t.responseStart-t.navigationStart)||0),
+        dom_ready: Math.round(n ? n.domContentLoadedEventEnd : (t.domContentLoadedEventEnd-t.navigationStart)||0),
+        page_load: Math.round(n ? n.loadEventEnd : (t.loadEventEnd-t.navigationStart)||0),
+        nav_type:  n ? n.type : (['navigate','reload','back_forward','prerender'][perf.navigation&&perf.navigation.type]||''),
+        redirects: n ? n.redirectCount : (perf.navigation&&perf.navigation.redirectCount||0),
+        transfer_kb: n ? Math.round(n.transferSize/1024) : 0,
+      };
+    } catch(e) { return {}; }
+  }
+
+  function utmParams() {
+    const p = new URLSearchParams(window.location.search), r={};
+    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','fbclid','msclkid','ttclid'].forEach(k=>{ const v=p.get(k); if(v) r[k]=v; });
+    return r;
+  }
+
+  function detectAdblock(cb) {
+    const d = document.createElement('div');
+    d.className='pub_300x250 pub_300x250m pub_728x90 text-ad textAd text_ad';
+    d.style.cssText='width:1px;height:1px;position:absolute;left:-9999px';
+    document.body.appendChild(d);
+    setTimeout(() => { cb(!d.offsetParent||d.offsetHeight===0); document.body.removeChild(d); }, 150);
+  }
+
+  window.addEventListener('scroll', () => { const h=document.body.scrollHeight-window.innerHeight; if(h>0){const p=Math.round((window.scrollY/h)*100);if(p>maxScroll)maxScroll=Math.min(p,100);} }, {passive:true});
+  document.addEventListener('click', () => { clicks++; const n=Date.now(); if(n-lastClick<600)rage++; lastClick=n; });
+  document.addEventListener('mousemove', e => { moves++; lastX=Math.round(e.clientX/window.innerWidth*100); lastY=Math.round(e.clientY/window.innerHeight*100); }, {passive:true});
+  document.addEventListener('keydown', () => keys++, {passive:true});
+
+  // visibilitychange — blur tracking + send trigger (merged)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      tabFocus = false;
+      blurStart = Date.now();
+      if (!sent) { sent = true; triggerSend(); }
+    } else {
+      totalBlur += Date.now() - blurStart;
+      tabFocus = true;
+    }
+  });
+
+  function send(extra) {
+    const dwell = Date.now() - T0;
+    navigator.sendBeacon(
+      'https://analytics-collect.stopvind.workers.dev',
+      JSON.stringify({
+        site:'vindcarbone', page:window.location.pathname, page_full:window.location.href, title:document.title,
+        ...referrerData(),
+        persistent_id:persistentId(), session_id:sessionId(), is_returning:isReturning(), visit_count:visitCount(), first_seen:firstSeen(),
+        dwell, active_time:dwell-totalBlur, blur_time:totalBlur,
+        ...timingData(),
+        scroll:maxScroll, clicks, rage_clicks:rage, mouse_moves:moves, keystrokes:keys, tab_focused:tabFocus, last_mouse_x:lastX, last_mouse_y:lastY,
+        lang:document.documentElement.lang||nav.language||'', langs:(nav.languages||[]).join(','),
+        screen_w:screen.width, screen_h:screen.height, screen_depth:screen.colorDepth,
+        avail_w:screen.availWidth, avail_h:screen.availHeight,
+        dpr:window.devicePixelRatio||1, viewport_w:window.innerWidth, viewport_h:window.innerHeight,
+        orientation:screen.orientation?screen.orientation.type:(window.innerWidth>window.innerHeight?'landscape':'portrait'),
+        user_agent:nav.userAgent, platform:nav.platform, vendor:nav.vendor,
+        plugins:(extra.plugins||[]).join('|'),
+        do_not_track:nav.doNotTrack, cookies_enabled:nav.cookieEnabled, online:nav.onLine,
+        timezone:Intl.DateTimeFormat().resolvedOptions().timeZone, tz_offset:new Date().getTimezoneOffset(),
+        locale:Intl.DateTimeFormat().resolvedOptions().locale||'',
+        cpu_cores:nav.hardwareConcurrency||0, memory_gb:nav.deviceMemory||0, max_touch:nav.maxTouchPoints||0,
+        conn_type:conn.effectiveType||'', conn_downlink:conn.downlink||0, conn_rtt:conn.rtt||0, save_data:conn.saveData||false,
+        ...webglData(),
+        canvas_fp:canvasFp(), audio_fp:extra.audio_fp||'',
         fonts:(extra.fonts||[]).join(','), font_count:(extra.fonts||[]).length,
         webrtc:!!(window.RTCPeerConnection||window.mozRTCPeerConnection),
         websocket:!!window.WebSocket, indexeddb:!!window.indexedDB,
@@ -38,6 +281,7 @@ udio_fp:extra.audio_fp||'',
 })();
 </script>
 </head>
+
 <body class="flex flex-col justify-between items-center p-4 md:p-8 relative" id="main-body">
 
     <!-- =======================================================================
