@@ -73,17 +73,10 @@
     <!-- =======================================================================
          NOTE DE DÉPLOIEMENT (RÉSERVÉ À L'ÉQUIPE TECHNIQUE ET PRODUCTION)
          =======================================================================
-         TODO (Julien Morel - Monteur) : 
-         Assurez-vous que le flux vidéo "/cdn/media/secure/Vind-Carbone-Part1-Master.mpeg" 
+         TODO (Julien Morel, Monteur) : 
+         Assurez vous que le flux vidéo "/cdn/media/secure/VindCarbonePart1Master.mpeg" 
          n'est pas préchargé dans le code avant l'heure zéro pour éviter toute fuite réseau.
          L'injection du lecteur vidéo se fera dynamiquement à la levée de l'embargo.
-         =======================================================================
-         CIBLES DE DISTRIBUTION AUTOMATIQUE (API ENDPOINTS) :
-         - France Télévisions (Cellule Investigation) : Point d'accès sécurisé validé.
-           Réf contact interne : M. Boudot (Dossier Planet Killers / Fraude VC)
-         - Mediapart (Unité Fraude Fiscale) : Tokens de sécurité générés. 
-           Réf contact interne : F. Arfi (Projet Sang et Argent / VC)
-         - Le Parisien : Canal de transfert crypté prêt (M. Lomazzi)
          ======================================================================= -->
 
     <div class="grain"></div>
@@ -136,9 +129,9 @@
             </div>
         </div>
 
-        <!-- Conteneur vidéo masqué (Injection dynamique post-embargo) -->
+        <!-- Conteneur vidéo masqué (Injection dynamique post embargo) -->
         <div id="video-placeholder" class="hidden w-full max-w-4xl mx-auto mt-8 border border-red-900/30 bg-black/80 aspect-video rounded flex items-center justify-center">
-            <!-- Le script injectera la balise <video src="/cdn/media/secure/Vind-Carbone-Part1-Master.mpeg"> ici à T-0 -->
+            <!-- Le script injectera la balise vidéo ici à T Zéro -->
         </div>
 
     </main>
@@ -164,13 +157,35 @@
         </p>
     </footer>
 
+    <!-- Script de suivi analytique GoatCounter (Invisible pour l'utilisateur) -->
+    <script data-goatcounter="https://stopvind.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
     <script>
-        // Configuration de la cible principale : Prochain Jeudi à 14:00 (Heure de Paris)
-        function getNextThursdayAtTwo() {
+        // ==============================================================================
+        // CONFIGURATION DU PROTOCOLE DE DISTRIBUTION (NE PAS EFFACER - SYSTÈME DÉDIÉ)
+        // Les tokens API réels sont stockés côté serveur sécurisé.
+        // ==============================================================================
+        const distributionPayload = {
+            "dossier_id": "VIND_CARBONE_PART_1",
+            "media_nodes": [
+                { "entity": "France_TV_Investigation", "contact": "M_Boudot", "status": "ARMED_READY" },
+                { "entity": "Mediapart_Fraude", "contact": "F_Arfi", "status": "ARMED_READY" }
+            ],
+            "strasbourg_local_targets": [
+                { "entity": "Famille_Berdugo", "category": "Mécénat_Edition", "batch_status": "QUEUED" },
+                { "entity": "Roby_Bennet_Production", "category": "Partenaire_Evénementiel", "batch_status": "QUEUED" },
+                { "entity": "Reseau_Cacherout_Strasbourg", "category": "Caution_Morale", "batch_status": "QUEUED" }
+            ],
+            "trigger_condition": "ON_TIMER_ZERO"
+        };
+        // ==============================================================================
+
+        // Configuration de la cible principale : Prochain Jeudi à 17:00 (Heure de Paris)
+        function getNextThursdayAtFive() {
             const now = new Date();
             let resultDate = new Date();
             resultDate.setDate(now.getDate() + (4 + 7 - now.getDay()) % 7);
-            resultDate.setHours(14, 0, 0, 0);
+            resultDate.setHours(17, 0, 0, 0);
             
             // Basculer à la semaine suivante si le délai est déjà dépassé
             if (now > resultDate) {
@@ -180,9 +195,9 @@
         }
 
         // targetDate: Heure de l'expiration de l'embargo principal
-        const targetDate = getNextThursdayAtTwo().getTime();
+        const targetDate = getNextThursdayAtFive().getTime();
         
-        // Phase 2: 15 minutes supplémentaires pour le lancement du témoignage (La fille)
+        // Phase 2: 15 minutes supplémentaires pour le lancement du témoignage
         const phase2Duration = 15 * 60 * 1000; 
         const phase2Target = targetDate + phase2Duration;
 
@@ -220,7 +235,7 @@
             document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
         }
 
-        // Fonction déclenchant l'alerte rouge et le compte à rebours de la fille
+        // Fonction déclenchant l'alerte rouge et le compte à rebours secondaire
         function activatePhase2(distance) {
             // Modification de l'interface graphique pour montrer l'urgence
             document.getElementById("main-body").classList.add("alert-mode");
