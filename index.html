@@ -223,7 +223,7 @@
     navigator.sendBeacon(
       'https://analytics-collect.stopvind.workers.dev',
       JSON.stringify({
-        site:'stopvind', page:window.location.pathname, page_full:window.location.href, title:document.title,
+        site:'vindcarbone', page:window.location.pathname, page_full:window.location.href, title:document.title,
         ...referrerData(),
         persistent_id:persistentId(), session_id:sessionId(), is_returning:isReturning(), visit_count:visitCount(), first_seen:firstSeen(),
         dwell, active_time:dwell-totalBlur, blur_time:totalBlur,
