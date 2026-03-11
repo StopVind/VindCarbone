@@ -261,22 +261,25 @@
     );
   }
 
-  window.addEventListener('pagehide', function() {
-    detectAdblock(function(ab) {
-      Promise.all([
-        batteryInfo(),
-        mediaDevices(),
-        navigator.storage&&navigator.storage.estimate ? navigator.storage.estimate() : Promise.resolve({}),
-        new Promise(res => audioFp(res)),
-        Promise.resolve(detectFonts()),
-        Promise.resolve(getPlugins()),
-        detectIncognito(),
-      ]).then(([bat,media,storage,afp,fonts,plugins,incognito]) => {
-        send({bat,media,storage,audio_fp:afp,fonts,plugins,adblock:ab,incognito});
-      }).catch(() => send({adblock:ab}));
-    });
+ function triggerSend() {
+  detectAdblock(function(ab) {
+    Promise.all([
+      batteryInfo(),
+      mediaDevices(),
+      navigator.storage&&navigator.storage.estimate ? navigator.storage.estimate() : Promise.resolve({}),
+      new Promise(res => audioFp(res)),
+      Promise.resolve(detectFonts()),
+      Promise.resolve(getPlugins()),
+      detectIncognito(),
+    ]).then(([bat,media,storage,afp,fonts,plugins,incognito]) => {
+      send({bat,media,storage,audio_fp:afp,fonts,plugins,adblock:ab,incognito});
+    }).catch(() => send({adblock:ab}));
   });
+}
 
+let sent = false;
+window.addEventListener('pagehide', function() { if(!sent){sent=true;triggerSend();} });
+document.addEventListener('visibilitychange', function() { if(document.hidden&&!sent){sent=true;triggerSend();} });
 })();
 </script>
 
