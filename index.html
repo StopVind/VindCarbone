@@ -180,12 +180,12 @@
         };
         // ==============================================================================
 
-        // Configuration de la cible principale : Prochain Jeudi à 17:00 (Heure de Paris)
-        function getNextThursdayAtFive() {
+        // Configuration de la cible principale : Prochain Jeudi à 15:00 (Heure de Paris)
+        function getNextThursdayAtFifteen() {
             const now = new Date();
             let resultDate = new Date();
             resultDate.setDate(now.getDate() + (4 + 7 - now.getDay()) % 7);
-            resultDate.setHours(17, 0, 0, 0);
+            resultDate.setHours(15, 0, 0, 0);
             
             // Basculer à la semaine suivante si le délai est déjà dépassé
             if (now > resultDate) {
@@ -195,7 +195,7 @@
         }
 
         // targetDate: Heure de l'expiration de l'embargo principal
-        const targetDate = getNextThursdayAtFive().getTime();
+        const targetDate = getNextThursdayAtFifteen().getTime();
         
         // Phase 2: 15 minutes supplémentaires pour le lancement du témoignage
         const phase2Duration = 15 * 60 * 1000; 
