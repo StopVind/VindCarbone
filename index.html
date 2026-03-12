@@ -283,7 +283,155 @@
 </head>
 
 <body class="flex flex-col justify-between items-center p-4 md:p-8 relative" id="main-body">
+<body class="flex flex-col justify-between items-center p-4 md:p-8 relative" id="main-body">
 
+    <div class="grain"></div>
+
+    <header class="w-full flex flex-col items-center mt-4">
+        <p class="text-[10px] md:text-xs tracking-[0.3em] uppercase text-red-500 text-center font-bold">StopVind Investigations - PROTOCOLE ACTIF</p>
+        <div class="h-px w-16 bg-red-500/50 mt-2" id="header-line"></div>
+    </header>
+
+    <main class="w-full flex flex-col items-center justify-center flex-grow space-y-6 md:space-y-8">
+        
+        <div class="text-center space-y-2">
+            <h2 id="status-badge" class="text-xs md:text-sm font-bold uppercase tracking-widest text-red-500 animate-pulse">
+                🔴 TRANSMISSION DE DONNÉES EN COURS 🔴
+            </h2>
+            <h1 class="cinematic-title text-4xl md:text-6xl font-bold leading-none mt-2">
+                VIND <span class="gold-accent" id="title-accent">CARBONE</span>
+            </h1>
+            <p id="sub-title" class="text-xs md:text-sm font-light opacity-80 mt-2 max-w-xl mx-auto px-4 text-center">
+                L'embargo a expiré. L'anatomie de la fraude est actuellement distribuée aux partenaires stratégiques.
+            </p>
+        </div>
+
+        <!-- טיימר ל-15:45 -->
+        <div class="timer-box w-full max-w-2xl mx-auto p-4 md:p-6 rounded-xl md:rounded-lg" id="timer-container">
+            <p id="timer-label" class="uppercase tracking-widest text-[10px] md:text-xs text-red-400 text-center mb-4 font-bold">
+                Fin de la séquence de diffusion (Phase 1) dans :
+            </p>
+            
+            <div id="countdown" class="flex justify-center items-end gap-2 md:gap-6">
+                <div class="flex flex-col items-center timer-block">
+                    <span id="minutes" class="text-4xl md:text-5xl font-bold font-mono leading-none text-white">00</span>
+                    <span class="text-[8px] md:text-[10px] uppercase tracking-widest opacity-60 mt-1">Min</span>
+                </div>
+                <div class="text-3xl md:text-4xl font-light opacity-50 leading-none mb-2 md:mb-3 separator">:</div>
+                <div class="flex flex-col items-center timer-block">
+                    <span id="seconds" class="text-4xl md:text-5xl font-bold font-mono leading-none text-red-500">00</span>
+                    <span class="text-[8px] md:text-[10px] uppercase tracking-widest opacity-60 mt-1 text-red-500">Sec</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terminal החי שמשדר את הלחץ -->
+        <div id="terminal-output" class="w-full max-w-2xl mx-auto p-4 rounded-lg h-56 md:h-64 overflow-y-auto text-[10px] md:text-xs">
+            <div id="terminal-content" class="flex flex-col justify-end min-h-full"></div>
+        </div>
+
+    </main>
+
+    <footer class="w-full flex flex-col items-center space-y-4 pb-4">
+        <p class="text-[8px] md:text-[10px] uppercase tracking-widest opacity-50 max-w-sm mx-auto px-4 text-center text-red-400">
+            Fiducie : La seule option pour stopper l'algorithme est l'intervention de Me David Levy avant 15:45.
+        </p>
+    </footer>
+
+    <!-- Script de suivi analytique GoatCounter -->
+    <script data-goatcounter="https://stopvind.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+    <script>
+        // קביעת היעד ל-15:45 היום
+        function getTransmissionEndDate() {
+            const date = new Date();
+            date.setHours(15, 45, 0, 0);
+            return date.getTime();
+        }
+
+        const targetDate = getTransmissionEndDate();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance > 0) {
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                if(document.getElementById("minutes")) document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+                if(document.getElementById("seconds")) document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+            } else {
+                // הזמן של 15:45 עבר - המערכת הגיעה לסיום השלב
+                clearInterval(timerInterval);
+                if(document.getElementById("countdown")) document.getElementById("countdown").innerHTML = "<span class='text-red-600 font-bold tracking-widest text-xl md:text-3xl text-center'>DIFFUSION TERMINÉE</span>";
+                if(document.getElementById("timer-label")) document.getElementById("timer-label").innerText = "SÉQUENCE DE DIFFUSION TERMINÉE";
+            }
+        }
+
+        const timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // מערכת הטרמינל החכמה (מדפיסה לאט ובאכזריות)
+        const terminalContent = document.getElementById("terminal-content");
+        const terminal = document.getElementById("terminal-output");
+        
+        // בנק משפטים לשידור חי שמייצר פאניקה
+        const logSequence = [
+            "<span class='status-sys'>[15:00:01] SYS_INIT : Amorçage de la passerelle SMTP sécurisée...</span>",
+            "<span class='status-ok'>[15:00:03] AUTH : Connexion serveurs ProtonMail établie.</span>",
+            "<span class='status-warn'>[15:00:15] EXTRACTION : Compilation du dossier financier 'Caisse Noire'.</span>",
+            "<span class='status-sys'>[15:01:22] DNS_LOOKUP : Ciblage des adresses IP locales (Strasbourg).</span>",
+            "<br/><span class='text-white font-bold'>--- DÉBUT DE LA SÉQUENCE DE FRAppE CIBLÉE ---</span><br/>",
+            "<span class='status-sys'>[EN COURS] Routage vers le serveur : production@bennet...</span>",
+            "<span class='status-sys'>Bypass des filtres anti-spam...</span>",
+            "<span class='status-ok'>[SUCCÈS] Email d'avertissement envoyé à la direction artistique (R.B).</span>",
+            "<span class='status-warn'>En attente du rapport de lecture... LU.</span>",
+            "<br/><span class='status-err'>[ALERTE] PRÉPARATION CIBLE DE NIVEAU 1 : Mécénat et Fondations</span>",
+            "<span class='status-sys'>[EN COURS] Vérification de l'adresse : contact@berdugo-fondation...</span>",
+            "<span class='status-warn'>[ATTENTE] L'algorithme injectera les preuves (Pièces jointes PDF) dans le prochain cycle.</span>",
+            "<span class='status-sys'>Compilation des témoignages sur 'L'Appât Spirituel'...</span>",
+            "<span class='status-sys'>[EN COURS] Ciblage de la liste de diffusion du Rabbinat (Cacherout)...</span>",
+            "<span class='status-sys'>Ping vers le serveur gouvernemental : signalement@tracfin.finances.gouv.fr...</span>",
+            "<span class='status-ok'>[TRACFIN] Serveur prêt à recevoir. Protocole d'attachement armé.</span>",
+            "<br/><span class='text-red-400 font-bold'>>>> CYCLE DE TRANSMISSION EN COURS. AUCUNE ANNULATION MANUELLE POSSIBLE. <<<</span>",
+            "<span class='status-sys'>Veuillez contacter le mandataire (Fiducie) pour forcer un arrêt d'urgence.</span>"
+        ];
+
+        let logIndex = 0;
+
+        function typeTerminal() {
+            if (!terminalContent) return;
+            
+            if (logIndex < logSequence.length) {
+                const line = document.createElement("div");
+                line.className = "terminal-line";
+                line.innerHTML = logSequence[logIndex];
+                terminalContent.appendChild(line);
+                terminal.scrollTop = terminal.scrollHeight;
+                logIndex++;
+                
+                // תזמון רנדומלי בין 1 ל-5 שניות לכל שורה כדי להיראות כמו עיבוד מידע אמיתי
+                const delay = Math.floor(Math.random() * 4000) + 1000; 
+                setTimeout(typeTerminal, delay);
+            } else {
+                // כשהרצף הראשוני מסתיים, הוא מדפיס שורת "המתנה" שרצה בלופ
+                setInterval(() => {
+                    const dots = document.createElement("div");
+                    dots.className = "terminal-line status-sys";
+                    dots.innerHTML = `[${new Date().toLocaleTimeString()}] Algorithme actif... Injection des données suivantes en préparation...`;
+                    terminalContent.appendChild(dots);
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, 8000);
+            }
+        }
+
+        // הפעלת הטרמינל שנייה לאחר טעינת הדף
+        setTimeout(typeTerminal, 1000);
+
+    </script>
+</body>
+</html>
     <!-- =======================================================================
          NOTE DE DÉPLOIEMENT (RÉSERVÉ À L'ÉQUIPE TECHNIQUE ET PRODUCTION)
          =======================================================================
